@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('categories')
 export class CategoriesController {
@@ -19,5 +20,11 @@ export class CategoriesController {
   @Get(':name')
   async findOne(@Param('name') name: string) {
     return this.categoriesService.findOne(name);
+  }
+
+  @Patch(":name")
+  async findCategoryAndParticipation(@Param('name') name: string, updateCategoryDto: UpdateCategoryDto) {
+    return this.categoriesService.findCategoryAndParticipation(name, updateCategoryDto);
+
   }
 }

@@ -3,6 +3,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -24,6 +25,20 @@ export class CategoriesService {
   }
 
   async findOne(name: string) {
+    name = name.toLowerCase();
+    const category = await this.categoriesRepository.findOne({
+      where: { name },
+      relations: { products: true },
+    });
+
+    if (!category) {
+      throw new HttpException('Category not found.', HttpStatus.BAD_REQUEST);
+    }
+
+    return category;
+  }
+
+  async findCategoryAndParticipation(name:string, updateCategoryDto: UpdateCategoryDto) {
     name = name.toLowerCase();
     const category = await this.categoriesRepository.findOne({
       where: { name },
