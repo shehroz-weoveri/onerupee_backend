@@ -12,6 +12,10 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
+    if (!createUserDto.name || !createUserDto.email) {
+      throw new HttpException('Please provide both name and email.', HttpStatus.BAD_REQUEST);
+    }
+
     const user = await this.usersRepository.findOneBy({
       email: createUserDto.email,
     });
@@ -26,6 +30,10 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
+    if (!email) {
+      throw new HttpException('Please provide the email.', HttpStatus.BAD_REQUEST);
+    }
+
     email = email.toLowerCase();
     const user = await this.usersRepository.findOneBy({ email });
 

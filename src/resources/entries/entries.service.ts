@@ -12,9 +12,13 @@ export class EntriesService {
   ) {}
 
   async create(createEntryDto: CreateEntryDto) {
-    const user = await this.usersService.findByEmail(createEntryDto.email);
+    if (!createEntryDto.email || !createEntryDto.productId)
+    {
+      throw new HttpException('Provide both email and productId', HttpStatus.BAD_REQUEST);
 
-    console.log(user);
+    }
+
+    const user = await this.usersService.findByEmail(createEntryDto.email);
 
     const update = await this.usersService.reduceBalanceAndSave(user);
 
