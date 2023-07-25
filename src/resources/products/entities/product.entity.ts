@@ -16,6 +16,9 @@ export class Product extends AbstractEntity<Product> {
   @Column({ nullable: true })
   image: string;
 
+  @Column({nullable: true})
+  winner: boolean;
+
   @ManyToOne(() => Category, (category) => category.products, {
     onDelete: 'CASCADE',
   })

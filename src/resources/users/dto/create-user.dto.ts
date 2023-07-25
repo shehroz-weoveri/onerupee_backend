@@ -6,4 +6,6 @@ export class CreateUserDto {
 
     @IsEmail()
     email: string;
+
+    deviceId: string;
 }

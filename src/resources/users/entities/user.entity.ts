@@ -11,4 +11,7 @@ export class User extends AbstractEntity<User> {
 
   @Column()
   balance: number;
+
+  @Column({ nullable: true })
+  deviceId: string;
 }
