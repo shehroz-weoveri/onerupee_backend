@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { CategoriesService } from '../categories/categories.service';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -28,6 +29,17 @@ export class ProductsService {
   }
 
   async findOne(pname: string) {
+    pname = pname.toLowerCase();
+    const product = await this.productsRepository.findOneBy({ name: pname });
+
+    if (!product) {
+      throw new HttpException('Product not found.', HttpStatus.BAD_REQUEST);
+    }
+
+    return product;
+  }
+
+  async findProductAndParticipation(pname: string, updateProductDto: UpdateProductDto) {
     pname = pname.toLowerCase();
     const product = await this.productsRepository.findOneBy({ name: pname });
 
