@@ -16,6 +16,8 @@ export class Product extends AbstractEntity<Product> {
   @Column({ nullable: true })
   image: string;
 
+  participated: boolean;
+
   @Column({nullable: true})
   winner: boolean;
 

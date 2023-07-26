@@ -22,9 +22,8 @@ export class CategoriesController {
     return this.categoriesService.findOne(name);
   }
 
-  @Patch(":name")
-  async findCategoryAndParticipation(@Param('name') name: string, updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.findCategoryAndParticipation(name, updateCategoryDto);
-
+  @Patch()
+  async findCategoryAndParticipation(@Body() updateCategoryDto: UpdateCategoryDto) {
+    return this.categoriesService.findParticipation(updateCategoryDto);
   }
 }

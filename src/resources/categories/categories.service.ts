@@ -4,12 +4,16 @@ import { Category } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { EntriesService } from '../entries/entries.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private readonly categoriesRepository: Repository<Category>,
+    private readonly entriesService: EntriesService,
+    private readonly usersService: UsersService,
     private readonly entityManager: EntityManager,
   ) {}
 
@@ -38,17 +42,28 @@ export class CategoriesService {
     return category;
   }
 
-  async findCategoryAndParticipation(name:string, updateCategoryDto: UpdateCategoryDto) {
-    name = name.toLowerCase();
-    const category = await this.categoriesRepository.findOne({
-      where: { name },
+  async findParticipation(updateCategoryDto: UpdateCategoryDto) {
+    console.log(updateCategoryDto.email);
+
+    const user = await this.usersService.findByEmail(updateCategoryDto.email);
+
+    const productsData = await this.categoriesRepository.find({
       relations: { products: true },
     });
 
-    if (!category) {
-      throw new HttpException('Category not found.', HttpStatus.BAD_REQUEST);
-    }
+    const entriesByUser = await this.entriesService.findEntriesForUser(user.id);
 
-    return category;
+    console.log(productsData, entriesByUser);
+
+    productsData.forEach((category) => {
+      category.products.forEach((product) => {
+        product.participated = entriesByUser.find(
+          (entry) => entry.productId === product.id,
+        )
+          ? true
+          : false;
+      });
+    });
+    return productsData;
   }
 }
