@@ -7,7 +7,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @Post()
+  @Patch()
   async create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
@@ -22,7 +22,7 @@ export class CategoriesController {
     return this.categoriesService.findOne(name);
   }
 
-  @Patch()
+  @Post()
   async findCategoryAndParticipation(@Body() updateCategoryDto: UpdateCategoryDto) {
     return this.categoriesService.findParticipation(updateCategoryDto);
   }
