@@ -15,7 +15,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     if (!createUserDto.name || !createUserDto.email) {
       throw new HttpException(
-        'Please provide name, email and deviceId.',
+        'Please provide name and email.',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -28,16 +28,16 @@ export class UsersService {
       return user;
     }
 
-    const userByDevice = await this.usersRepository.findOneBy({
-      deviceId: createUserDto.deviceId,
-    });
+    // const userByDevice = await this.usersRepository.findOneBy({
+    //   deviceId: createUserDto.deviceId,
+    // });
 
-    if (userByDevice) {
-      throw new HttpException(
-        'Your device already registered one user. Please use another device to use another email',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    // if (userByDevice) {
+    //   throw new HttpException(
+    //     'Your device already registered one user. Please use another device to use another email',
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
 
     const newUser = new User({ ...createUserDto, balance: 5 });
 
