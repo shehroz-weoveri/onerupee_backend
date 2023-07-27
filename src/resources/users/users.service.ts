@@ -20,6 +20,8 @@ export class UsersService {
       );
     }
 
+    createUserDto.email = createUserDto.email.toLowerCase();
+
     const user = await this.usersRepository.findOneBy({
       email: createUserDto.email,
     });
